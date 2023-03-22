@@ -54,10 +54,12 @@ public class Script_Instance : GH_ScriptInstance
   /// Output parameters as ref arguments. You don't have to assign output parameters, 
   /// they will have a default value.
   /// </summary>
-  private void RunScript(List<Line> EdgeLn, List<double> EdgeMag, List<Point3d> NodePt, List<Line> ExtForceLn, List<Point3d> DefSuppNode, List<Point3d> FreeSuppNode, int iter, double Deform_Ratio, double SubD, bool WeightVec, ref object Nodes, ref object IntForceLns, ref object IntForceMags, ref object ExtForceLns)
+  private void RunScript(List<Line> EdgeLn, List<double> EdgeMag, List<Point3d> NodePt, List<Line> ExtForceLn, List<Point3d> DefSuppNode, List<Point3d> FreeSuppNode, int iter, double Deform_Ratio, double SubD, bool WeightVec, bool Run, ref object Nodes, ref object IntForceLns, ref object IntForceMags, ref object ExtForceLns)
   {
         ///
-    ///This is a vector-difference-based equlibrium solver, developed by SHEN Yuchi, Postdoc SouthEast University Nanjing, China.
+    ///This is a vector-difference-based equlibrium solver, developed by:
+    ///[Yuchi Shen]: Southeast University of Nanjing, School of Architecture
+    ///[Pierluigi D'Acunto]: Technical University of Munich, Professorship of Structural Design
     ///<Beta version>
     ///Please make sure the assembly <VecDiffEqSolverBeta.dll> is well attached in the component.
     ///
@@ -77,102 +79,107 @@ public class Script_Instance : GH_ScriptInstance
     double tol = 0.0001;
     double threshold = 0.0001;
     double subdivison = SubD;
+    double scale = 1.0;
+
     #endregion
 
-
-    #region 1_Data Construction
-    //AllSuppIndex:All the support nodes that will not move in the form-finding process; AllSuppIndex contians OptSuppIndex;
-    //OptSuppIndex:Certain supports that can be optimized loads in the form-finding process;
-    //The difference set of above two are the supports predefined, the same with the loads;
-
-    List<int> AllSuppIndex;
-    List<int> OptSuppIndex;
-    VecDiffSolver.Data.SupportMatch(NodePt, FreeSuppNode, DefSuppNode, tol, out AllSuppIndex, out OptSuppIndex);
-
-    //LoadOnVertices: a List of Lists( with load vectors applying on the same index vertex)
-    List<List<Vector3d>> LoadOnVertices;
-    VecDiffSolver.Data.LoadMatch(NodePt, ExtForceLn, tol, out LoadOnVertices);
-
-    //1.1_Construct the matrix of forces in the structure;
-    double[,] Matr_force;
-    VecDiffSolver.Data.ConstructForceMatrix(NodePt, EdgeLn, EdgeMag, tol, out Matr_force);
-    #endregion
-
-
-    #region 2_MainLoop
-    //2 MainLoop
-    List<Point3d> Vns = new List<Point3d>(NodePt);
-    int Iteration = 0;
-    double convergence = double.MaxValue;
-    List<double> ratioList = NodePt.Select(p => Deform_Ratio).ToList();
-
-    while(Iteration < iter && convergence >= threshold)
+    if(Run)
     {
-      Iteration++;
+      #region 1_Data Construction
+      //AllSuppIndex:All the support nodes that will not move in the form-finding process; AllSuppIndex contians OptSuppIndex;
+      //OptSuppIndex:Certain supports that can be optimized loads in the form-finding process;
+      //The difference set of above two are the supports predefined, the same with the loads;
 
-      Vector3d[] AVsums;
-      if(WeightVectorDiff)
+      List<int> AllSuppIndex;
+      List<int> OptSuppIndex;
+      VecDiffSolver.Data.SupportMatch(NodePt, FreeSuppNode, DefSuppNode, tol, out AllSuppIndex, out OptSuppIndex);
+
+      //LoadOnVertices: a List of Lists( with load vectors applying on the same index vertex)
+      List<List<Vector3d>> LoadOnVertices;
+      VecDiffSolver.Data.LoadMatch(NodePt, ExtForceLn, tol, out LoadOnVertices);
+
+      //1.1_Construct the matrix of forces in the structure;
+      double[,] Matr_force;
+      VecDiffSolver.Data.ConstructForceMatrix(NodePt, EdgeLn, EdgeMag, tol, out Matr_force);
+      #endregion
+
+
+      #region 2_MainLoop
+      //2 MainLoop
+      List<Point3d> Vns = new List<Point3d>(NodePt);
+      int Iteration = 0;
+      double convergence = double.MaxValue;
+      List<double> ratioList = NodePt.Select(p => Deform_Ratio).ToList();
+
+      while(Iteration < iter && convergence >= threshold)
       {
-        //Calculate weighted Vertex Force Sum
-        Vector3d[,] VecDiffMatrix;
-        VecDiffSolver.VecDiff.Weight_VectorDiffOnNodes(Vns, OptSuppIndex, Matr_force, LoadOnVertices, subdivison, tol, out VecDiffMatrix, out AVsums);
+        Iteration++;
 
-        //Update Vertices
-        List<Point3d> N_Vertices;
-        VecDiffSolver.VecDiff.UpdateVertices(AllSuppIndex, Vns, AVsums, ratioList, Matr_force, LoadOnVertices, tol, out N_Vertices);
+        Vector3d[] AVsums;
+        if(WeightVectorDiff)
+        {
+          //Calculate weighted Vertex Force Sum
+          Vector3d[,] VecDiffMatrix;
+          VecDiffSolver.VecDiff.Weight_VectorDiffOnNodes(Vns, OptSuppIndex, Matr_force, LoadOnVertices, subdivison, tol, out VecDiffMatrix, out AVsums);
 
-        //Update weighted Force Matrix
-        VecDiffSolver.VecDiff.Weight_UpdateMatr_force(ref Matr_force, VecDiffMatrix, Vns, N_Vertices, Deform_Ratio, tol);
-        Vns = N_Vertices;
+          //Update Vertices
+          List<Point3d> N_Vertices;
+          VecDiffSolver.VecDiff.UpdateVertices(AllSuppIndex, Vns, AVsums, ratioList, Matr_force, LoadOnVertices, tol, out N_Vertices);
+
+          //Update weighted Force Matrix
+          VecDiffSolver.VecDiff.Weight_UpdateMatr_force(ref Matr_force, VecDiffMatrix, Vns, N_Vertices, Deform_Ratio, tol);
+          Vns = N_Vertices;
+        }
+        else
+        {
+          //Calculate Vertex Force Sum
+          VecDiffSolver.VecDiff.VectorDiffOnNodes(Vns, OptSuppIndex, Matr_force, LoadOnVertices, subdivison, tol, out AVsums);
+
+          //Update Vertices
+          List<Point3d> N_Vertices;
+          VecDiffSolver.VecDiff.UpdateVertices(AllSuppIndex, Vns, AVsums, ratioList, Matr_force, LoadOnVertices, tol, out N_Vertices);
+
+          //Update Force Matrix
+          VecDiffSolver.VecDiff.UpdateMatr_force(ref Matr_force, AVsums, Vns, N_Vertices, Deform_Ratio, tol);
+          Vns = N_Vertices;
+        }
+
+        //Check convergence
+        convergence = 0.0;
+        foreach(Vector3d vec in AVsums)
+        {
+          convergence += vec.Length;
+        }
+        if(Iteration == iter || convergence < threshold)
+        {
+          report = VecDiffSolver.Debug.Report(AVsums, Deform_Ratio, Iteration);
+        }
       }
-      else
-      {
-        //Calculate Vertex Force Sum
-        VecDiffSolver.VecDiff.VectorDiffOnNodes(Vns, OptSuppIndex, Matr_force, LoadOnVertices, subdivison, tol, out AVsums);
 
-        //Update Vertices
-        List<Point3d> N_Vertices;
-        VecDiffSolver.VecDiff.UpdateVertices(AllSuppIndex, Vns, AVsums, ratioList, Matr_force, LoadOnVertices, tol, out N_Vertices);
+      #endregion
 
-        //Update Force Matrix
-        VecDiffSolver.VecDiff.UpdateMatr_force(ref Matr_force, AVsums, Vns, N_Vertices, Deform_Ratio, tol);
-        Vns = N_Vertices;
-      }
 
-      //Check convergence
-      convergence = 0.0;
-      foreach(Vector3d vec in AVsums)
-      {
-        convergence += vec.Length;
-      }
-      if(Iteration == iter || convergence < threshold)
-      {
-        Print(VecDiffSolver.Debug.Report(AVsums, Deform_Ratio, Iteration));
-      }
+      #region 3_GetSolution
+      //Get the solved equilibrium information;
+      VecDiffSolver.IO.Solution(Vns, Matr_force, LoadOnVertices, OptSuppIndex, AllSuppIndex, ImposeEquilibrium, tol, scale, out Internal_Ln, out Internal_Force, out External_Ln);
+      StrNodes = Vns;
+      #endregion
     }
-    #endregion
-
-
-    #region 3_GetSolution
-    //Get the solved equilibrium information;
-    List <Line> Internal_Ln;
-    List<double> Internal_Force;
-    List<Line> External_Ln;
-    VecDiffSolver.IO.Solution(Vns, Matr_force, LoadOnVertices, OptSuppIndex, AllSuppIndex, ImposeEquilibrium, tol, out Internal_Ln, out Internal_Force, out External_Ln);
-    #endregion
-
 
     //Outputs in GH Component
-    Nodes = Vns;
+    Nodes = StrNodes;
     IntForceLns = Internal_Ln;
     IntForceMags = Internal_Force;
     ExtForceLns = External_Ln;
-
+    Print(report);
   }
 
   // <Custom additional code> 
-  
-
+    List<Point3d>StrNodes;
+  List <Line> Internal_Ln;
+  List<double> Internal_Force;
+  List<Line> External_Ln;
+  string report;
   // </Custom additional code> 
 
   private List<string> __err = new List<string>(); //Do not modify this list directly.
@@ -252,6 +259,12 @@ public class Script_Instance : GH_ScriptInstance
       WeightVec = (bool)(inputs[9]);
     }
 
+    bool Run = default(bool);
+    if (inputs[10] != null)
+    {
+      Run = (bool)(inputs[10]);
+    }
+
 
 
     //3. Declare output parameters
@@ -262,7 +275,7 @@ public class Script_Instance : GH_ScriptInstance
 
 
     //4. Invoke RunScript
-    RunScript(EdgeLn, EdgeMag, NodePt, ExtForceLn, DefSuppNode, FreeSuppNode, iter, Deform_Ratio, SubD, WeightVec, ref Nodes, ref IntForceLns, ref IntForceMags, ref ExtForceLns);
+    RunScript(EdgeLn, EdgeMag, NodePt, ExtForceLn, DefSuppNode, FreeSuppNode, iter, Deform_Ratio, SubD, WeightVec, Run, ref Nodes, ref IntForceLns, ref IntForceMags, ref ExtForceLns);
       
     try
     {

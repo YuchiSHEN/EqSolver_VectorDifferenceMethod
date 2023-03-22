@@ -16,6 +16,7 @@ This is a strut-and-tie structure equlibrium solver based on the vector differen
 
 This method is currently developed and mantained by:
 - __Yuchi Shen__ [Southeast University of Nanjing, School of Architecture](http://arch.seu.edu.cn/jz_en/main.htm)
+- __Pierluigi D'Acunto__ [Technical University of Munich, Professorship of Structural Design](https://www.arc.ed.tum.de/sd/structural-design/)
 <br>
 <br>
 
