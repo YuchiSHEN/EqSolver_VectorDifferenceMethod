@@ -6,13 +6,17 @@ This is a strut-and-tie structure equlibrium solver based on the vector differen
  You can also refer to the .NET assembly [VecDiffEqSolverBeta.dll] in C# code to run this method in customized workflow.
 <br>
 <br>
+
 <div align="center">
 <img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/5e0e550f401641ab598b3d6bc58817c41dee7a80/png/lattice.png">
 </div>
+
 <br>
 <br>
+
 This method is currently developed and mantained by:
 - __Yuchi Shen__ [Southeast University of Nanjing, School of Architecture](http://arch.seu.edu.cn/jz_en/main.htm)
+<br>
 <br>
 
 If you use the method, please reference the official GitHub repository: <br>
@@ -23,11 +27,5 @@ year = {2023}, <br>
 note = {Release 1.00 Beta}, <br>
 url = { https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod.git }, <br>
 }
-<br>
-<br>
-
-<br>
-<br>
-
 <br>
 <br>
