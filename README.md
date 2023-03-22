@@ -22,7 +22,7 @@ This method is currently developed and mantained by:
 
 If you use the method, please reference the official GitHub repository: <br>
 @Misc{VecDiffEqSolver, <br>
-author = {Shen, Yuchi}, <br>
+author = {Shen Yuchi, Pierluigi D'Acunto}, <br>
 title = {{EqulibriumSolver_VectorDifference}}, <br>
 year = {2023}, <br>
 note = {Release 1.00 Beta}, <br>
