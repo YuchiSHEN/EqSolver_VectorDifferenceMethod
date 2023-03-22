@@ -6,8 +6,9 @@ This is a strut-and-tie structure equlibrium solver based on the vector differen
  You can also refer to the .NET assembly [VecDiffEqSolverBeta.dll] in C# code to run this method in customized workflow.
 <br>
 <br>
-
-
+<div align="center">
+<img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/5e0e550f401641ab598b3d6bc58817c41dee7a80/png/lattice.png">
+</div>
 <br>
 <br>
 This method is currently developed and mantained by:
