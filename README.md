@@ -1,8 +1,8 @@
 # EqulibriumSolver_VectorDifference
 
-This is a strut-and-tie structure equlibrium solver based on the vector difference minimizing in force polygon. With conceputal structure models with definition of tension and compression as input, the solver iteratively find the closet equilibrium state of the form and solves the corresponding forces.You can also do contraint form finding by fixing the points in the model.
+This is a strut-and-tie structure equlibrium solver based on the vector difference minimizing in force polygon. With conceputal structure models with definition of tension and compression as input, the solver iteratively find the closet equilibrium state of the form and solves the corresponding forces. You can also do contraint-based form finding by fixing the points in the model.
 
- The method is implemented as a C# component for the CAD environment [McNeel Rhino/Grasshopper](https://www.rhino3d.com/) for both Windows and MacOS.
+ The method is implemented as a C# component for the CAD environment [McNeel Rhino/Grasshopper](https://www.rhino3d.com/) for both Windows and MacOS.<br>
  You can also refer to the .NET assembly [VecDiffEqSolverBeta.dll] in C# code to run this method in customized workflow.
 <br>
 <br>
