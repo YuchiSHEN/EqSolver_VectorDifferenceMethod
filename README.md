@@ -11,6 +11,10 @@ This is an equilibrium solver for strut-and-tie structures, predicated on minimi
 <img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/5e0e550f401641ab598b3d6bc58817c41dee7a80/png/lattice.png">
 </div>
 
+<div align="center">
+<img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/5e0e550f401641ab598b3d6bc58817c41dee7a80/png/lattice.png">
+</div>
+
 <br>
 <br>
 
