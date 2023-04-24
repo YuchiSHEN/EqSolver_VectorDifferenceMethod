@@ -12,7 +12,7 @@ This is an equilibrium solver for strut-and-tie structures, predicated on minimi
 </div>
 
 <div align="center">
-<img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/5e0e550f401641ab598b3d6bc58817c41dee7a80/giff/Beam_Para.gif">
+<img src="https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod/blob/9a2b2646f5538654c21bbadc563fbf5b0313bbff/gif/Beam_Para.gif">
 </div>
 
 <br>
