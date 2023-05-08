@@ -21,12 +21,13 @@ This is an equilibrium solver for strut-and-tie structures, predicated on minimi
 This method is currently developed and mantained by:
 - __Yuchi Shen__ [Southeast University of Nanjing, School of Architecture](http://arch.seu.edu.cn/jz_en/main.htm)
 - __Pierluigi D'Acunto__ [Technical University of Munich, Professorship of Structural Design](https://www.arc.ed.tum.de/sd/structural-design/)
+- __Patrick Ole Ohlbrock__ [ETH Zurich, Chair of Structural Design](https://schwartz.arch.ethz.ch/)
 <br>
 <br>
 
 If you use the method, please reference the official GitHub repository: <br>
 @Misc{VecDiffEqSolver, <br>
-author = {Shen Yuchi, Pierluigi D'Acunto}, <br>
+author = {Shen Yuchi, Pierluigi D'Acunto, Patrick Ole Ohlbrock}, <br>
 title = {{EqulibriumSolver_VectorDifference}}, <br>
 year = {2023}, <br>
 note = {Release 1.00 Beta}, <br>
