@@ -1,4 +1,4 @@
-# Vector Difference Method
+# Vectorial Difference Method
 
 This is a novel form-finding approach for the equilibrium-based design of strut-and-tie models.
 <br>
