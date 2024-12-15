@@ -33,7 +33,7 @@ author = {Yuchi Shen, Yinan Xiao, Pierluigi D'Acunto, Patrick Ole Ohlbrock}, <br
 title = {{EqulibriumSolver_VectorDifference}}, <br>
 year = {2023}, <br>
 note = {Release 1.00 Beta}, <br>
-url = { https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod.git }, <br>
+url = { [https://github.com/YuchiSHEN/EqSolver_VectorDifferenceMethod.git](https://github.com/YuchiSHEN/Vectorial-Difference-Method.git) }, <br>
 }
 <br>
 <br>
